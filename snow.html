@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Streamer Snow</title>
+  <style>
+    * {
+      border: 0;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100vh;
+      width: 100vw;
+    }
+    #snow {
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      pointer-events: none;
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: 2147483647;
+    }
+    .flake {
+      background: #fff;
+      border-radius: 50%;
+      height: 10px;
+      margin-top: -10px;
+      position: absolute;
+      width: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="snow"></div>
+  <script>
+    (() => {
+      "use strict";
+
+      function rnd(a, b) {
+        return Math.floor(Math.random() * (b - a + 1)) + a;
+      }
+
+      const fragment = new DocumentFragment();
+      const style = document.createElement("style");
+
+      for (let i = 1; i < 200; i += 1) {
+        let rndX = rnd(0, 1e6) * 1e-4;
+        let rndO = rnd(-1e5, 1e5) * 1e-4;
+        let rndT = (rnd(3, 8) * 10).toFixed(2);
+        let rndS = (rnd(0, 1e4) * 1e-4).toFixed(2);
+
+        style.innerHTML += `.flake:nth-child(${i}){opacity:${(rnd(1, 1e4) * 1e-4).toFixed(2)};transform:translate(${rndX.toFixed(2)}vw,-10px)scale(${rndS});animation:fall-${i} ${rnd(10, 30)}s -${rnd(0, 30)}s linear infinite}@keyframes fall-${i}{${rndT}%{transform:translate(${(rndX + rndO).toFixed(2)}vw,${rndT}vh)scale(${rndS})}to{transform:translate(${(rndX + (rndO / 2)).toFixed(2)}vw,105vh)scale(${rndS})}}`;
+
+        const flake = document.createElement("i");
+        flake.classList.add("flake");
+        fragment.appendChild(flake);
+      }
+
+      document.head.appendChild(style);
+      document.getElementById("snow").appendChild(fragment);
+    })();
+  </script>
+</body>
